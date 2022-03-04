@@ -30,3 +30,13 @@ func TestNew(t *testing.T) {
 	}
 	fmt.Println(cards)
 }
+
+func TestDefaultSort(t *testing.T) {
+	cards := New(DefaultSort)
+	//13 ranks *4 suits
+	expectedCard := Card{Rank: Four, Suit: Spade}
+	if cards[3] != expectedCard {
+		t.Error("Expected three of Spades, received:", cards[3])
+	}
+	fmt.Println(cards)
+}

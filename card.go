@@ -2,7 +2,10 @@
 //go:generate stringer -type=Suit,Rank
 package deck
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 type Suit uint8
 
@@ -49,6 +52,7 @@ type Card struct {
 	Rank
 }
 
+//Minute 9:40
 func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
@@ -56,12 +60,33 @@ func (c Card) String() string {
 	return fmt.Sprintf("%s of %ss", c.Rank.String(), c.Suit.String())
 }
 
-func New() []Card {
+//functional Options
+func New(opts ...func([]Card) []Card) []Card {
 	var cards []Card
 	for _, suit := range suits {
 		for rank := minRank; rank <= maxRank; rank++ {
 			cards = append(cards, Card{suit, rank})
 		}
 	}
+	for _, opt := range opts {
+		cards = opt(cards)
+	}
 	return cards
+}
+
+//New(DefaultSort)
+
+func DefaultSort(cards []Card) []Card {
+	sort.Slice(cards, Less(cards))
+	return cards
+}
+
+func Less(cards []Card) func(i, j int) bool {
+	return func(i, j int) bool {
+		return absRank(cards[i]) < absRank(cards[j])
+	}
+}
+
+func absRank(c Card) int {
+	return int(c.Suit)*int(maxRank) + int(c.Rank)
 }
