@@ -4,7 +4,9 @@ package deck
 
 import (
 	"fmt"
+	"math/rand"
 	"sort"
+	"time"
 )
 
 type Suit uint8
@@ -52,7 +54,7 @@ type Card struct {
 	Rank
 }
 
-//Minute 9:40
+//Minute 0 Joker
 func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
@@ -74,11 +76,16 @@ func New(opts ...func([]Card) []Card) []Card {
 	return cards
 }
 
-//New(DefaultSort)
-
 func DefaultSort(cards []Card) []Card {
 	sort.Slice(cards, Less(cards))
 	return cards
+}
+
+func Sort(less func(cards []Card) func(i, j int) bool) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		sort.Slice(cards, less(cards))
+		return cards
+	}
 }
 
 func Less(cards []Card) func(i, j int) bool {
@@ -89,4 +96,11 @@ func Less(cards []Card) func(i, j int) bool {
 
 func absRank(c Card) int {
 	return int(c.Suit)*int(maxRank) + int(c.Rank)
+}
+
+func Shuffle(cards []Card) []Card {
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(cards), func(i, j int) { cards[i], cards[j] = cards[j], cards[i] })
+	fmt.Println(cards)
+	return cards
 }
