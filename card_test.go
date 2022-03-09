@@ -2,6 +2,7 @@ package deck
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -49,4 +50,22 @@ func TestSort(t *testing.T) {
 		t.Error("Expected three of Spades, received:", cards[3])
 	}
 	fmt.Println(cards)
+}
+
+func TestJokers(t *testing.T) {
+	numb_jokers := rand.Intn(10)
+	cards := New(Jokers(numb_jokers))
+	count := 0
+	for _, c := range cards {
+		if c.Suit == Joker {
+			count++
+		}
+	}
+	if count != numb_jokers {
+		t.Errorf("Expected %v Jokers but got: %v", numb_jokers, count)
+	}
+}
+
+func TestFilter(t *testing.T) {
+
 }

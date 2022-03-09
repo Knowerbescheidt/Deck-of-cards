@@ -54,7 +54,7 @@ type Card struct {
 	Rank
 }
 
-//Minute 0 Joker
+//Minute 2 Filter
 func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
@@ -103,4 +103,25 @@ func Shuffle(cards []Card) []Card {
 	rand.Shuffle(len(cards), func(i, j int) { cards[i], cards[j] = cards[j], cards[i] })
 	fmt.Println(cards)
 	return cards
+}
+
+func Jokers(n int) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		for i := 0; i < n; i++ {
+			cards = append(cards, Card{Suit: Joker, Rank: Rank(i)})
+		}
+		return cards
+	}
+}
+
+func Filter(f func(card Card) bool) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		var ret []Card
+		for _, c := range cards {
+			if !f(c) {
+				ret = append(ret, c)
+			}
+		}
+		return ret
+	}
 }
