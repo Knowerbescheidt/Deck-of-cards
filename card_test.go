@@ -29,7 +29,6 @@ func TestNew(t *testing.T) {
 	if len(cards) != 13*4 {
 		t.Error("Wrong number of cards")
 	}
-	fmt.Println(cards)
 }
 
 func TestDefaultSort(t *testing.T) {
@@ -39,7 +38,6 @@ func TestDefaultSort(t *testing.T) {
 	if cards[3] != expectedCard {
 		t.Error("Expected three of Spades, received:", cards[3])
 	}
-	fmt.Println(cards)
 }
 
 func TestSort(t *testing.T) {
@@ -49,7 +47,6 @@ func TestSort(t *testing.T) {
 	if cards[3] != expectedCard {
 		t.Error("Expected three of Spades, received:", cards[3])
 	}
-	fmt.Println(cards)
 }
 
 func TestJokers(t *testing.T) {
@@ -67,5 +64,21 @@ func TestJokers(t *testing.T) {
 }
 
 func TestFilter(t *testing.T) {
+	filter := func(card Card) bool {
+		return card.Rank == Two
+	}
+	cards := New(Filter(filter))
+	for i, card := range cards {
+		if card.Rank == Two {
+			t.Errorf("Expected filtering for Two's but found two at index %v", i)
+		}
+	}
+}
 
+func TestDeck(t *testing.T) {
+	numb_decks := rand.Intn(5)
+	cards := New(Deck(numb_decks))
+	if len(cards) != 13*4*numb_decks {
+		t.Errorf("Expected Deck to have length %v; but instead the length is: %v", 13*4*numb_decks, len(cards))
+	}
 }

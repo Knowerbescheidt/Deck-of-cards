@@ -54,7 +54,7 @@ type Card struct {
 	Rank
 }
 
-//Minute 2 Filter
+// Testing Shuffle video
 func (c Card) String() string {
 	if c.Suit == Joker {
 		return c.Suit.String()
@@ -121,6 +121,16 @@ func Filter(f func(card Card) bool) func([]Card) []Card {
 			if !f(c) {
 				ret = append(ret, c)
 			}
+		}
+		return ret
+	}
+}
+
+func Deck(n int) func([]Card) []Card {
+	return func(cards []Card) []Card {
+		var ret []Card
+		for i := 0; i < n; i++ {
+			ret = append(ret, cards...)
 		}
 		return ret
 	}
