@@ -82,3 +82,20 @@ func TestDeck(t *testing.T) {
 		t.Errorf("Expected Deck to have length %v; but instead the length is: %v", 13*4*numb_decks, len(cards))
 	}
 }
+
+func TestShuffle(t *testing.T) {
+	//make shuffle rand deterministic
+	//first call to shuffle.Perm(52) should be
+	//[40 35 ...]
+	shuffleRand = rand.New(rand.NewSource(0))
+	sorted := New()
+	cards := New(Shuffle)
+	first := sorted[40]
+	second := sorted[35]
+	if cards[0] != first {
+		t.Errorf("Expected the first card to be %s, received %s", first, cards[0])
+	}
+	if cards[1] != second {
+		t.Errorf("Expected the first card to be %s, received %s", second, cards[1])
+	}
+}

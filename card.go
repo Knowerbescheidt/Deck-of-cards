@@ -98,11 +98,16 @@ func absRank(c Card) int {
 	return int(c.Suit)*int(maxRank) + int(c.Rank)
 }
 
+//package level variables normally not that nice
+var shuffleRand = rand.New(rand.NewSource(time.Now().Unix()))
+
 func Shuffle(cards []Card) []Card {
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(cards), func(i, j int) { cards[i], cards[j] = cards[j], cards[i] })
-	fmt.Println(cards)
-	return cards
+	ret := make([]Card, len(cards))
+	perm := shuffleRand.Perm(len(cards))
+	for i, j := range perm {
+		ret[i] = cards[j]
+	}
+	return ret
 }
 
 func Jokers(n int) func([]Card) []Card {
